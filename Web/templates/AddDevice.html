@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <br>
+            <div class="btn-group">
+                  <button type="button" class="btn btn-danger " style="margin-right: 10px" onclick="location.href = '/Devices';" >Back</button>
+            </div>
+            <br>
+            <br>
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Add new device</legend>
+                <div class="form-group" >
+                    {{ form.ide.label(class="form-control-label") }}
+                    {% if form.ide.errors %}
+                        {{ form.ide(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.ide.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.ide(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.casn.label(class="form-control-label") }}
+                    {% if form.casn.errors %}
+                        {{ form.casn(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.casn.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.casn(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.account.label(class="form-control-label") }}
+
+                    {% if form.account.errors %}
+                        {{ form.account(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.account.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.account(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+{% endblock content %}

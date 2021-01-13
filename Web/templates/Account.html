@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+<main role="main" class="container">
+    <article class="media content-section">
+        <div class="media-body" width="100">
+            <h2>Información de la cuenta</h2>
+            <br>
+            <div class="row">
+                <div class="column col-sm-3" >
+                    <p>Nombre de la compañia: </p>
+                    <br>
+                    <p>RNC: </p>
+                    <br>
+                    <p>Correo: </p>
+                    <br>
+                    <p>Dirección: </p>
+                    <br>
+                    <p>Teléfono: </p>
+                </div>
+                <div class="column col-sm-3" >
+                    <input disabled type="text" id="fname" name="fname" class="form-control"  value="{{current_user.nombre_empresa}}"><br>
+                    <input disabled type="text" id="lname" name="lname" class="form-control" value="{{current_user.rnc}}"><br>
+                    <input disabled type="text" id="email" name="email"  class="form-control"  value="{{current_user.correo}}"><br>
+                    <input disabled type="text" id="location" name="location"  class="form-control"  value="{{current_user.direccion}}"><br>
+                    <input disabled type="text" id="telephone" name="telephone"  class="form-control"  value="{{current_user.telefono}}"><br>
+                </div>
+            </div>
+            {%if current_user.correo != "prueba@final.com" %}
+                <button type="button" class="btn btn-success " onclick="location.href = '/serviceinfo';">Servicios </button>
+            {%endif%}
+        </div>
+    </article>
+
+</main>
+{% endblock content %}

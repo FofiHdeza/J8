@@ -1,0 +1,227 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: #007bff;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Float four columns side by side */
+.column {
+  float: left;
+  width: 25%;
+  padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* Style the counter cards */
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #f1f1f1;
+}
+
+/*  PROGRESS BAR  */
+
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Float four columns side by side */
+.column {
+  float: left;
+  width: 25%;
+  padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* Style the counter cards */
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #f1f1f1;
+}
+
+/*  PROGRESS BAR  */
+
+
+</style>
+
+<main role="main" class="container">
+    <article class="media content-section">
+        <div class="media-body">
+            <h1 style="text-align:center">
+                Estado de la red
+            </h1>
+            <hr class="solid">
+            <div class="row">
+                <div class="column">
+                    <div class="card">
+                        <h3>Zona Norte</h3>
+                            <p align="left"><span class="dot"></span> Ancho de banda </p>
+                            <p align="left"><span class="dot"></span> Interfaces</p>
+                            <p align="left"><span class="dot"></span> IP públicas</p>
+                            <p align="left"><span class="dot"></span> IP circuitos virtuales </p>
+                            <div class="progress" style="height:30px">
+                                <div class="progress-bar  progress-bar-animated" style="width:{{zone_percents.norte}}%;height:30px;box-shadow:5px;color:black">{{zone_percents.norte}}%</div>
+                            </div>
+                        <p align="center" style="font-size:14px;">Consumido </p>
+                        <button type="button" class="btn btn-light" onclick="location.href = '/zonedetails/Norte';">Mas detalles</button>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="card">
+                        <h3>Zona sur</h3>
+                        <p align="left"><span class="dot"></span> Ancho de banda </p>
+                        <p align="left"><span class="dot"></span> Interfaces</p>
+                        <p align="left"><span class="dot"></span> IP públicas</p>
+                        <p align="left"><span class="dot"></span> IP circuitos virtuales </p>
+                        <div class="progress" style="height:30px">
+                            <div class="progress-bar  progress-bar-animated" style="width:{{zone_percents.sur}}%;height:30px;box-shadow:5px;color:black">{{zone_percents.sur}}%</div>
+                        </div>
+                        <p align="center" style="font-size:14px;">Consumido </p>
+                        <button type="button" class="btn btn-light" onclick="location.href = '/zonedetails/Sur';">Mas detalles</button>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="card">
+                        <h3>Zona Este</h3>
+                        <p align="left"><span class="dot"></span> Ancho de banda </p>
+                        <p align="left"><span class="dot"></span> Interfaces</p>
+                        <p align="left"><span class="dot"></span> IP públicas</p>
+                        <p align="left"><span class="dot"></span> IP circuitos virtuales </p>
+                        <div class="progress" style="height:30px">
+                            <div class="progress-bar  progress-bar-animated" style="width:{{zone_percents.norte}}%;height:30px;box-shadow:5px;color:black">{{zone_percents.norte}}%</div>
+                        </div>
+                        <p align="center" style="font-size:14px;">Consumido </p>
+                        <button type="button" class="btn btn-light" onclick="location.href = '/system';">Mas detalles</button>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="card">
+                        <h3>Zona Oeste</h3>
+                        <p align="left"><span class="dot"></span> Ancho de banda </p>
+                        <p align="left"><span class="dot"></span> Interfaces</p>
+                        <p align="left"><span class="dot"></span> IP públicas</p>
+                        <p align="left"><span class="dot"></span> IP circuitos virtuales </p>
+                        <div class="progress" style="height:30px">
+                            <div class="progress-bar  progress-bar-animated" style="width:{{zone_percents.norte}}%;height:30px;box-shadow:5px;color:black">{{zone_percents.norte}}%</div>
+                        </div>
+                        <p align="center" style="font-size:14px;">Consumido </p>
+                        <button type="button" class="btn btn-light" onclick="location.href = '/system';">Mas detalles</button>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <h1 style="text-align:center">
+                Servicios
+            </h1>
+            <hr class="solid">
+            <div class="card">
+                <table class="table table-hover table-default" id="servicios">
+                    <thead>
+                    <tr align="center">
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Tipo de servicio</th>
+                        <th scope="col">Localidad A</th>
+                        <th scope="col">Localidad B</th>
+                        <th scope="col">Ancho de banda de subida</th>
+                        <th scope="col">Ancho de banda de bajada</th>
+                        <th scope="col">Estado del servicio</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for service in posts.items()%}
+                    <tr align="center">
+                        <td> {{ service[1].nombre_cliente }} </td>
+                        <td> {{ service[1].tipo_servicio }} </td>
+                        <td> {{ service[1].location_a }} </td>
+                        {%if service[1].tipo_servicio == 'Internet'%}
+                        <td> N/A </td>
+                        {%else%}
+                        <td> {{ service[1].location_b }} </td>
+                        {%endif%}
+                        <td> {{ service[1].up_bw/1000 }} Mbps</td>
+                        <td> {{ service[1].dw_bw/1000 }} Mbps </td>
+                        <td>{%if   service[1].active   == False %}
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"> </i>
+                        {% else %}
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        {% endif %}</td>
+                        <td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </article>
+</main>
+
+{% endblock content %}
+
+
+

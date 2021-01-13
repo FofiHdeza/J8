@@ -1,0 +1,306 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<style>
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: #007bff;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Float four columns side by side */
+.column {
+  float: left;
+  width: 25%;
+  padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* Style the counter cards */
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #f1f1f1;
+}
+
+/*  PROGRESS BAR  */
+
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Float four columns side by side */
+.column {
+  float: left;
+  width: 50%;
+  padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* Style the counter cards */
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #f1f1f1;
+}
+
+/*  PROGRESS BAR  */
+
+
+</style>
+
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Add product</legend>
+                <div class="form-group" >
+                    {{ form.casn.label(class="form-control-label", placeholder="Seleccione") }}
+                    {% if form.casn.errors %}
+                        {{ form.casn(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.casn.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.casn(class="form-control form-control-lg disabled", value=id) }}
+                    {% endif %}
+                </div>
+                <div class="form-group" >
+                    {{ form.product.label(class="form-control-label", placeholder="Seleccione") }}
+                        {% if form.product.errors %}
+                            {{ form.product(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.product.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.product(class="form-control form-control-lg") }}
+                        {% endif %}
+                </div>
+                <div class="form-group" >
+                    {{ form.producttype.label(class="form-control-label", placeholder="Seleccione") }}
+                    {% if form.producttype.errors %}
+                        {{ form.producttype(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.producttype.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.producttype(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                <button type="button" class="btn btn-danger " onclick="location.href = '/Devices';">Back</button>
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+    <div class="row">
+                <div class="column">
+                    <div class="card">
+                        <div class="content-section">
+                            <fieldset class="form-group">
+                                    <legend class="border-bottom mb-4">Products assigned in the account</legend>
+                                    <div class="form-group" >
+                                        <table class="table table-sm table-borderless mb-0">
+
+                                            <thead class="thead-dark">
+                                            <tr>
+                                                <th>Product ID</th>
+                                                <th>Status</th>
+                                                <th>ExpiryDate</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for product in products %}
+                                            <tr >
+                                                <td>{{product[5]}}</td>
+                                                <td>{{product[6]}}</td>
+                                                <td>{{product[3]}}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-default" name="{{product[0]}}" data-toggle="modal" data-target="#upgradeservice{{ product[0] }}">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" name="{{product[0]}}" data-toggle="modal" data-target="#Deleteproduct{{ product[0] }}">
+                                                        <span class="glyphicon glyphicon-remove"></span>
+                                                    </button>
+                                                    <!-- The Modal (configservice) -->
+                                                    <div class="modal" id="upgradeservice{{ product[0] }}">
+                                                      <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                          <!-- Modal Header -->
+                                                          <div class="modal-header">
+                                                            <h4 class="modal-title">Confirmacion</h4>
+                                                          </div>
+                                                          <!-- Modal body -->
+                                                          <div class="modal-body" align="center">
+                                                              Esta seguro que desea continuar?{{product[0]}}
+                                                          </div>
+                                                          <div class="modal-footer" align="right">
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-danger " style="margin-right: 10px" data-dismiss="modal" >Cancelar</button>
+                                                                    <button type="button" class="btn btn-success " style="margin-right: 10px" onclick="location.href = '/Editdevice/{{product[0]}}';" >Aceptar</button>
+                                                                </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <!-- The Modal (delete) -->
+                                                    <div class="modal" id="Deleteproduct{{ product[0] }}">
+                                                      <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                          <!-- Modal Header -->
+                                                          <div class="modal-header">
+                                                            <h4 class="modal-title">Confirmacion</h4>
+                                                          </div>
+                                                          <!-- Modal body -->
+                                                          <div class="modal-body" align="center">
+                                                              Esta seguro que desea continuar?{{product[0]}}
+                                                          </div>
+                                                          <div class="modal-footer" align="right">
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-danger " style="margin-right: 10px" data-dismiss="modal" >Cancelar</button>
+                                                                    <button type="button" class="btn btn-success " style="margin-right: 10px" onclick="location.href = '/Deleteproduct/{{product[0]}}';" >Aceptar</button>
+                                                                </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card">
+                        <div class="content-section">
+                            <fieldset class="form-group">
+                                    <legend class="border-bottom mb-4">STBs in the account</legend>
+                                    <div class="form-group" >
+                                        <table class="table table-sm table-borderless mb-0">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>CaSN</th>
+                                                    <th>Status</th>
+                                                    <th>ActivationStatus</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for acc_device in acc_devices %}
+                                                    <tr >
+                                                        <td>{{acc_device[2]}}</td>
+                                                        <td>{{acc_device[4]}}</td>
+                                                        <td>{%if  acc_device[7]  == 'ACTIVE' %}
+                                                             <i class="fa fa-check" aria-hidden="true"> </i>
+                                                        {% else %}
+                                                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                                        {% endif %}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="card">
+                        <div class="content-section">
+                            <fieldset class="form-group">
+                                    <legend class="border-bottom mb-4">Products available</legend>
+                                    <div class="form-group" >
+                                        <table class="table table-sm table-borderless mb-0">
+
+                                            <thead class="thead-dark">
+                                            <tr>
+                                                <th>Product ID</th>
+                                                <th>Product name</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for products in productscreated %}
+                                            <tr >
+                                                <td>{{products[0]}}</td>
+                                                <td>{{products[1]}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{% endblock content %}

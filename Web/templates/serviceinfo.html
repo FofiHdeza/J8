@@ -1,0 +1,178 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<html lang="en">
+<head>
+<!--    <meta charset="utf-8">-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+</head>
+<main role="main" class="container">
+    <article class="media content-section">
+        <div class="media-body" id="tabla">
+            <h2>Servicios</h2>
+            <br>
+            {%if current_user.correo == "prueba@final.com"%}
+                <div class="btn-group">
+                  <button type="button" class="btn btn-danger " style="margin-right: 10px" onclick="location.href = '/system';" >Back</button>
+                </div>
+            {%else%}
+                <div class="btn-group">
+                  <button type="button" class="btn btn-danger " style="margin-right: 10px" onclick="location.href = '/account';" >Atrás</button>
+                  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Nuevo servicio
+                  </button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" onclick="location.href = '/new_internet_service';">Internet</a>
+                        <a class="dropdown-item" onclick="location.href = '/new_l2vpn_service';">L2VPN</a>
+                      </div>
+                </div>
+            <br>
+            {%endif%}
+            <table class="table table-hover table-default" id="servicios">
+                <thead>
+                    <tr align="center">
+                        {%if current_user.correo == "prueba@final.com" %}
+                            <th scope="col">ID</th>
+                        {%endif%}
+                        <th scope="col">Tipo de servicio</th>
+                        <th scope="col">Localidad A</th>
+                        <th scope="col">Localidad B</th>
+                        <th scope="col">Ancho de banda de subida</th>
+                        <th scope="col">Ancho de banda de bajada</th>
+                        <th scope="col">Estado del servicio</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for service in posts.items()%}
+                <tr align="center">
+                    {%if current_user.correo == "prueba@final.com" %}
+                        <td> {{ service[1].id }} </td>
+                    {%endif%}
+                    <td> {{ service[1].tipo_servicio }} </td>
+                    <td> {{ service[1].location_a }} </td>
+                    {%if service[1].tipo_servicio == 'Internet'%}
+                        <td> N/A </td>
+                    {%else%}
+                        <td> {{ service[1].location_b }} </td>
+                    {%endif%}
+                    <td> {{ service[1].up_bw/1000 }} Mbps </td>
+                    <td> {{ service[1].dw_bw/1000 }} Mbps </td>
+                    <td>
+                        {%if service[1].in_progress   == True %}
+                            <i class="fa fa-refresh" aria-hidden="true"> </i>
+                        {%else%}
+                            {%if   service[1].active   == False %}
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"> </i>
+                            {% else %}
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            {% endif %}
+                        {%endif%}
+                    </td>
+                    <td>
+                        {%if current_user.correo == "prueba@final.com"%}
+                            {%if service[1].active == True%}
+                                <button type="button" class="btn btn-default" name="{{service[0]}}" onclick="location.href = '/configview/{{service[1].id}}/{{service[1].location_a}}/{{service[1].location_b}}';">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button>
+                            {%endif%}
+                            <button type="button" class="btn btn-default" name="{{service[0]}}" data-toggle="modal" data-target="#deleteservice{{ service[1].id }}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        {%else%}
+                            <button type="button" class="btn btn-default" name="{{service[0]}}" data-toggle="modal" data-target="#confservice{{ service[1].id }}">
+                            <span class="glyphicon glyphicon-wrench"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" name="{{service[0]}}" data-toggle="modal" data-target="#upgradeservice{{ service[1].id }}"  >
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" name="{{service[0]}}" data-toggle="modal" data-target="#deleteservice{{ service[1].id }}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        {%endif%}
+                        <!-- The Modal (configservice) -->
+                        <div class="modal" id="confservice{{ service[1].id }}">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <!-- Modal Header -->
+                              <div class="modal-header">
+                                <h4 class="modal-title">Confirmacion</h4>
+                              </div>
+                              <!-- Modal body -->
+                                {% if  service[1].tipo_servicio  == "L2vpn" %}
+                                    <div class="modal-body" align="center">
+                                        Esta seguro que desea continuar?
+                                    </div>
+                                    <div class="modal-footer" align="right">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-danger " style="margin-right: 10px" data-dismiss="modal" >Cancelar</button>
+                                              <button type="button" class="btn btn-success " style="margin-right: 10px" onclick="location.href = '/configservice/{{service[0]}}';" >Aceptar</button>
+                                          </div>
+                                    </div>
+                                {%elif service[1].tipo_servicio  == "Internet" %}
+                                    <div class="modal-body" align="center">
+                                        Esta seguro que desea continuar?
+                                    </div>
+                                    <div class="modal-footer" align="right">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-danger " style="margin-right: 10px" data-dismiss="modal" >Cancelar</button>
+                                              <button type="button" class="btn btn-success " style="margin-right: 10px" onclick="location.href = '/configservice/{{service[0]}}';" >Aceptar</button>
+                                          </div>
+                                    </div>
+                                {%endif%}
+                            </div>
+                          </div>
+                        </div>
+                        <!-- The Modal (configservice) -->
+                        <div class="modal" id="upgradeservice{{ service[1].id }}">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <!-- Modal Header -->
+                              <div class="modal-header">
+                                <h4 class="modal-title">Confirmacion</h4>
+                              </div>
+                              <!-- Modal body -->
+                              <div class="modal-body" align="center">
+                                  Esta seguro que desea continuar?
+                              </div>
+                              <div class="modal-footer" align="right">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-danger " style="margin-right: 10px" data-dismiss="modal" >Cancelar</button>
+                                        <button type="button" class="btn btn-success " style="margin-right: 10px" onclick="location.href = '/upgradeservice/{{service[0]}}';" >Aceptar</button>
+                                    </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- The Modal (configservice) -->
+                        <div class="modal" id="deleteservice{{ service[1].id }}">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <!-- Modal Header -->
+                              <div class="modal-header">
+                                <h4 class="modal-title">Confirmacion</h4>
+                              </div>
+                              <!-- Modal body -->
+                              <div class="modal-body" align="center">
+                                  Esta seguro que desea continuar?
+                              </div>
+                              <div class="modal-footer" align="right">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-danger " style="margin-right: 10px" data-dismiss="modal" >Cancelar</button>
+                                        <button type="button" class="btn btn-success " style="margin-right: 10px" onclick="location.href = '/deleteservice/{{service[0]}}';" >Aceptar</button>
+                                    </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</main>
+{% endblock content %}
+</html>

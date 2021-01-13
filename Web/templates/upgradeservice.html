@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Upgrade</legend>
+                {%if tipo_servicio == "Internet"%}
+                    <div class="form-group">
+                        {{ form.up_bw.label(class="form-control-label") }}
+                        {% if form.up_bw.errors %}
+                            {{ form.up_bw(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.up_bw.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                        {{up_baw/1000}} Mbps
+                            {{ form.up_bw(class="form-control form-control-lg", placeholder="Ingrese un nuevo ancho de banda") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.dw_bw.label(class="form-control-label") }}
+                        {% if form.dw_bw.errors %}
+                            {{ form.dw_bw(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.dw_bw.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                        {{dw_baw /1000}} Mbps
+                            {{ form.dw_bw(class="form-control form-control-lg", placeholder="Ingrese un nuevo ancho de banda") }}
+                        {% endif %}
+                    </div>
+                {%else%}
+                    <div class="form-group">
+                        {{ form.l2vpn_bw.label(class="form-control-label") }}
+                        {% if form.l2vpn_bw.errors %}
+                            {{ form.l2vpn_bw(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.l2vpn_bw.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                        {{up_baw/1000}} Mbps
+                            {{ form.l2vpn_bw(class="form-control form-control-lg", placeholder="Ingrese un nuevo ancho de banda") }}
+                        {% endif %}
+                    </div>
+                {%endif%}
+            </fieldset>
+            <div class="form-group">
+                <button type="button" class="btn btn-danger " onclick="location.href = '/serviceinfo';">Back</button>
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+{% endblock content %}

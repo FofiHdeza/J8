@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <h2>Detalle de la notificación</h2>
+        <br>
+        <div class="btn-group">
+            <button type="button" class="btn btn-danger " onclick="location.href = '/notifications';">Back</button>
+        </div>
+        {%if usuario_dic%}
+            <div class="form-group" align="center" >
+                    <textarea disabled  cols="100" rows="5">
+                                Se ha agregado una nueva empresa llamada {{usuario_dic['nombre_empresa']}}
+                                con RNC {{usuario_dic['rnc']}}, la misma, reside en {{usuario_dic['direccion']}}.
+
+                                Contactos: {{usuario_dic['telefono']}} {{usuario_dic['correo']}} </textarea>
+            </div>
+        {%endif%}
+        {%if ser_usuario_dic and ser_servicio_dic%}
+            <div class="form-group" align="center" >
+                    <textarea disabled  cols="100" rows="7">
+                                {{notificacion_dic["des"]}} en la zona {{ser_servicio_dic['location_a']}}
+                                con un ancho de bajada de {{ser_servicio_dic['up_bw']/1000}} Mb y de bajada de {{ser_servicio_dic['dw_bw']/1000}} Mb
+
+                                Dicho servicio fue solicitado por la empresa {{ser_usuario_dic['nombre_empresa']}}.
+
+                                Contactos: {{ser_usuario_dic['telefono']}} {{ser_usuario_dic['correo']}} </textarea>
+            </div>
+        {%endif%}
+        {%if res_usuario_dic and res_servicio_dic%}
+            <div class="form-group" align="center" >
+                    <textarea disabled  cols="100" rows="10">
+                                El servicio con id {{res_servicio_dic['id']}} en la zona {{res_servicio_dic['location_a']}} para {{res_servicio_dic['tipo_servicio']}}
+                                {{notificacion_dic['des']}}.
+
+                                Ancho de banda de bajada: {{res_servicio_dic['up_bw']/1000}} Mb
+                                Ancho de banda de subida: {{res_servicio_dic['up_bw']/1000}} Mb
+
+                                Dicho servicio fue solicitado por la empresa {{res_usuario_dic['nombre_empresa']}}.
+
+                                Contactos: {{res_usuario_dic['telefono']}} {{res_usuario_dic['correo']}} </textarea>
+            </div>
+        {%endif%}
+    </div>
+{% endblock content %}

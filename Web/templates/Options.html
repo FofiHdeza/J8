@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% block content %}
+<html lang="en">
+<head>
+<!--    <meta charset="utf-8">-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+</head>
+<main role="main" class="container">
+<!-- The Modal (configservice) -->
+        <div class="modal" id="confservice">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Servicio</h4>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body">
+                  Su servicio se esta configurando!
+                  <div class="spinner-border" role="status"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+    <article class="media content-section">
+        <div class="media-body" id="tabla">
+            <h2>Services Info</h2>
+            <br>
+            <div class="btn-group">
+              <button type="button" class="btn btn-danger " style="margin-right: 10px" onclick="location.href = '/account';" >Back</button>
+              <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                New Service
+              </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" onclick="location.href = '/new_internet_service';">Internet</a>
+                    <a class="dropdown-item" onclick="location.href = '/new_l2vpn_service';">L2VPN</a>
+                  </div>
+            </div>
+            <table class="table table-hover table-default" id="servicios">
+                <thead>
+                    <tr align="center">
+                        <th scope="col">Tipo de servicio</th>
+                        <th scope="col">Localidad A</th>
+                        <th scope="col">Localidad B</th>
+                        <th scope="col">Ancho de banda de subida</th>
+                        <th scope="col">Ancho de banda de bajada</th>
+                        <th scope="col">Estado del servicio</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for service in posts.items()%}
+                <tr align="center">
+                    <td> {{ service[1].tipo_servicio }} </td>
+                    <td> {{ service[1].location_a }} </td>
+                    {%if service[1].tipo_servicio == 'internet'%}
+                        <td> N/A </td>
+                    {%else%}
+                        <td> {{ service[1].location_b }} </td>
+                    {%endif%}
+                    <td> {{ service[1].up_bw/1000 }} MB</td>
+                    <td> {{ service[1].dw_bw/1000 }} MB </td>
+                    <td> {{ service[1].active }} </td>
+                    <td>
+                        <button type="button" class="btn btn-default" name="{{service[0]}}" data-toggle="modal" data-target="#confservice" onclick="location.href = '/configservice/{{service[0]}}';">
+                            <span class="glyphicon glyphicon-wrench"></span>
+                        </button>
+                        <button type="button" class="btn btn-default" name="{{service[0]}}" onclick="location.href = '/upgradeservice/{{service[0]}}';" >
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button type="button" class="btn btn-default" name="{{service[0]}}" data-toggle="modal" data-target="#deleteservice" onclick="location.href = '/deleteservice/{{service[0]}}';">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</main>
+</html>
+{% endblock content %}

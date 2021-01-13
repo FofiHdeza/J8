@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+{% block content %}
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<article class="media content-section">
+    <form method="POST" action="">
+        <div class="media-body">
+        <br>
+        <button type="button" class="btn btn-success " onclick="location.href = '/Adddevice';">Add device </button>
+        <br>
+        <div class="form-group" >
+            <br>
+                    {{ form.filter.label(class="form-control-label") }}
+                    {{ form.filter(class="form-control form-control-lg") }}
+
+                    {{ form.filtertype.label(class="form-control-label") }}
+                    {% if form.filtertype.errors %}
+                        {{ form.filtertype(class="is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.filtertype.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.filtertype(class="form-control") }}
+                    {% endif %}
+        </div>
+         <div class="form-group">
+            <button type="submit" class="btn btn-success ">Search </button>
+         </div>
+        <div class="table-responsive">
+            <br>
+            <table class="table table-sm table-borderless mb-0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>AccountID</th>
+                        <th>CaSN</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Modified</th>
+                        <th>ActivationStatus</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for device in devices %}
+                        <tr >
+                            <td>{{device[0]}}</td>
+                            <td>{{device[1]}}</td>
+                            <td>{{device[2]}}</td>
+                            <td>{{device[4]}}</td>
+                            <td>{{device[5]}}</td>
+                            <td>{{device[6]}}</td>
+                            <td>{%if  device[7]  == 'ACTIVE' %}
+                                 <i class="fa fa-check" aria-hidden="true"> </i>
+                            {% else %}
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            {% endif %}</td>
+                            <td>
+                                <button type="button" class="btn btn-default" name="{{device[0]}}" onclick="location.href = '/Addproduct/{{device[2]}}';">
+                                    <span class="glyphicon glyphicon-check"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" name="{{device[0]}}" onclick="location.href = '/Editdevice/{{device[0]}}';">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" name="{{device[0]}}" data-toggle="modal" data-target="#deleteservice{{ device[0] }}">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                                <!-- The Modal (configservice) -->
+                                <div class="modal" id="upgradeservice{{ device[0] }}">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <!-- Modal Header -->
+                                      <div class="modal-header">
+                                        <h4 class="modal-title">Confirmacion</h4>
+                                      </div>
+                                      <!-- Modal body -->
+                                      <div class="modal-body" align="center">
+                                          Esta seguro que desea continuar?{{device[0]}}
+                                      </div>
+                                      <div class="modal-footer" align="right">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-danger " style="margin-right: 10px" data-dismiss="modal" >Cancelar</button>
+                                                <button type="button" class="btn btn-success " style="margin-right: 10px" onclick="location.href = '/Editdevice/{{device[0]}}';" >Aceptar</button>
+                                            </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- The Modal (delete) -->
+                                <div class="modal" id="deleteservice{{ device[0] }}">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <!-- Modal Header -->
+                                      <div class="modal-header">
+                                        <h4 class="modal-title">Confirmacion</h4>
+                                      </div>
+                                      <!-- Modal body -->
+                                      <div class="modal-body" align="center">
+                                          Esta seguro que desea continuar?{{device[0]}}
+                                      </div>
+                                      <div class="modal-footer" align="right">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-danger " style="margin-right: 10px" data-dismiss="modal" >Cancelar</button>
+                                                <button type="button" class="btn btn-success " style="margin-right: 10px" onclick="location.href = '/Deletedevice/{{device[0]}}';" >Aceptar</button>
+                                            </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </form>
+
+</article>
+{% endblock content %}
+

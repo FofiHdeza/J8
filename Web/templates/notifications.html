@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+{% block content %}
+<main role="main" class="container">
+          <div class="row align-items-center">
+            <div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages%}
+                        {% for category, message in messages%}
+                            <div class="alert alert-{{ category }}">
+                                {{message}}
+                            </div>
+                        {%endfor%}
+                    {% endif%}
+                {% endwith %}
+            </div>
+          </div>
+        <article class="media content-section">
+            <div class="media-body">
+                <button class="btn btn-primary" onclick="myUFunction()">Usuarios ({{len_user_dict}})</button>
+                <div id="usuarios" style="display:none;">
+                    <table class="table table-hover table-default">
+                        <thead>
+                        <tr align="center">
+                            <th scope="col">ID</th>
+                            <th scope="col">Tipo de notificacion</th>
+                            <th scope="col">Descripcion</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Revisada</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for notificacion in posts.items()%}
+                        <tr align="center">
+                            <td> <a href = notifications/detail/{{notificacion[1].id}}>{{ notificacion[1].id_servicio }}</a> </td>
+                            <td> {{ notificacion[1].tipo_not }} </td>
+                            <td> {{ notificacion[1].des }}</td>
+                            <td> {{ notificacion[1].fecha }} </td>
+                            <td>{%if  notificacion[1].checked  == False %}
+                                 <i class="fa fa-exclamation-triangle" aria-hidden="true"> </i>
+                            {% else %}
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            {% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </article>
+        <article class="media content-section">
+            <div class="media-body">
+            <button class="btn btn-primary" onclick="mySFunction()">Servicios ({{len_service_dict}})</button>
+                <div id="servicios" style="display:none;">
+                    <table class="table table-hover table-default">
+                        <thead>
+                        <tr align="center">
+                            <th scope="col">ID</th>
+                            <th scope="col">Tipo de notificacion</th>
+                            <th scope="col">Descripcion</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Revisada</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for notificacion in posts_service.items()%}
+                        <tr align="center">
+                            <td> <a href = notifications/detail/{{notificacion[1].id}}>{{ notificacion[1].id_servicio }}</a> </td>
+                            <td> {{ notificacion[1].tipo_not }} </td>
+                            <td> {{ notificacion[1].des }}</td>
+                            <td> {{ notificacion[1].fecha }} </td>
+                            <td>{%if  notificacion[1].checked  == False %}
+                                 <i class="fa fa-exclamation-triangle" aria-hidden="true"> </i>
+                            {% else %}
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            {% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+      </article>
+      <article class="media content-section">
+                <div class="media-body">
+                <button class="btn btn-primary" onclick="myRFunction()">Recursos ({{len_resource_dict}})</button>
+                    <div id="recursos" style="display:none;">
+                        <table class="table table-hover table-default">
+                            <thead>
+                            <tr align="center">
+                                <th scope="col">ID</th>
+                                <th scope="col">Tipo de notificacion</th>
+                                <th scope="col">Descripcion</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Revisada</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for notificacion in posts_resource.items()%}
+                            <tr align="center">
+                                <td> <a href = notifications/detail/{{notificacion[1].id}}>{{ notificacion[1].id_servicio }}</a> </td>
+                                <td> {{ notificacion[1].tipo_not }} </td>
+                                <td> {{ notificacion[1].des }}</td>
+                                <td> {{ notificacion[1].fecha }} </td>
+                                <td>{%if  notificacion[1].checked  == False %}
+                                 <i class="fa fa-exclamation-triangle" aria-hidden="true"> </i>
+                            {% else %}
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            {% endif %}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+          </article>
+</main>
+<script>
+function myUFunction() {
+  var x = document.getElementById("usuarios");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+function mySFunction() {
+  var x = document.getElementById("servicios");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+function myRFunction() {
+  var x = document.getElementById("recursos");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
+{% endblock content %}

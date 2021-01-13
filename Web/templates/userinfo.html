@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<!-- The Modal (configservice) -->
+        <div class="modal" id="confservice">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Usuario</h4>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body">
+                  Su servicio se esta configurando!
+                  <div class="spinner-border" role="status"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<!-- The Modal (deleteservice) -->
+        <div class="modal" id="deleteservice">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Servicio</h4>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body">
+                  Su servicio se esta eliminando
+                  <div class="spinner-border" role="status"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+<main role="main" class="container">
+    <article class="media content-section">
+        <div class="media-body" id="tabla">
+            <h2>Usuarios</h2>
+            <br>
+            <div class="btn-group">
+                  <button type="button" class="btn btn-danger " style="margin-right: 10px" onclick="location.href = '/system';" >Back</button>
+                </div>
+            <table class="table table-hover table-default" id="usuarios">
+                <thead>
+                    <tr align="center">
+                        <th scope="col">Empresa</th>
+                        <th scope="col">RNC</th>
+                        <th scope="col">Dirección</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Teléfono</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for service in posts.items()%}
+                <tr align="left">
+                    <td> {{ service[1].nombre_empresa }} </td>
+                    <td> {{ service[1].rnc }} </td>
+                    <td> {{ service[1].direccion }}</td>
+                    <td> {{ service[1].correo}}</td>
+                    <td> {{ service[1].telefono }} </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</main>
+{% endblock content %}
+</html>

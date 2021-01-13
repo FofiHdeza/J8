@@ -1,0 +1,192 @@
+{% extends "layout.html" %}
+{% block content %}
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+
+
+<!-- The Modal (configservice) -->
+        <div class="modal" id="upbw">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Ancho de banda consumido en base a Mbps</h4>
+              </div>
+              <!-- Modal body -->
+              <div class="modal-body" align="center">
+                  {{up_bw_taken}}Mbps/{{up_bw_total}}Mbps
+              </div>
+            </div>
+          </div>
+        </div>
+<!-- The Modal (configservice) -->
+        <div class="modal" id="dwbw">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Ancho de banda consumido en base a Mbps</h4>
+              </div>
+              <!-- Modal body -->
+              <div class="modal-body" align="center">
+                  {{dw_bw_taken}}Mbps/{{dw_bw_total}}Mbps
+              </div>
+            </div>
+          </div>
+        </div>
+<!-- The Modal (configservice) -->
+        <div class="modal" id="intf">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Interfaces asignadas</h4>
+              </div>
+              <!-- Modal body -->
+              <div class="modal-body" align="center">
+                  {% for i in taken_int_list%}
+                    <div>
+                        {{i}}
+                    </div>
+                  {%endfor%}
+              </div>
+            </div>
+          </div>
+        </div>
+<!-- The Modal (configservice) -->
+        <div class="modal" id="intip">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Segmentos asignados</h4>
+              </div>
+              <!-- Modal body -->
+              <div class="modal-body" align="center">
+                  {% for i in internet_ips_list%}
+                    <div>
+                        {{i}}
+                    </div>
+                  {%endfor%}
+              </div>
+            </div>
+          </div>
+        </div>
+<!-- The Modal (configservice) -->
+        <div class="modal" id="l2vpnip">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Segmentos asignados</h4>
+              </div>
+              <!-- Modal body -->
+              <div class="modal-body" align="center">
+                  {% for i in l2vpn_ips_list%}
+                    <div>
+                        {{i}}
+                    </div>
+                  {%endfor%}
+              </div>
+            </div>
+          </div>
+        </div>
+<main role="main" class="container">
+    <article class="media content-section">
+        <div class="media-body" width="100">
+            <h2 align="center"> Detalles de la zona {{zone}}</h2>
+            <br>
+            <div class="btn-group">
+                <button type="button" class="btn btn-danger " style="margin-right: 10px" onclick="location.href = '/system';" >Back</button>
+            </div>
+            <hr class="solid">
+            <div class="row ">
+                <div class="column col-sm-4">
+                <p> Ancho de banda de subida consumido <a data-toggle="modal" data-target="#upbw"><svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-arrow-up-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/>
+                </svg></a> </p>
+                </div>
+                <div class="col-md-6 align-self-center">
+                    <div class="progress" style="height:30px">
+                        <div class="progress-bar  progress-bar-animated" style="width:{{info.up_bw_av}}%;height:30px;box-shadow:5px;color:black">{{info.up_bw_av}}%</div>
+                    </div>
+                </div>
+                <a  data-toggle="modal" data-target="#upbw">
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </a>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="column col-sm-4">
+                <p> Ancho de banda de bajada consumido <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-arrow-down-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"/>
+                </svg></p>
+                </div>
+                <div class="col-md-6 align-self-center">
+
+                    <div class="progress" style="height:30px">
+                        <div class="progress-bar  progress-bar-animated" style="width:{{info.dw_bw_av}}%;height:30px;box-shadow:5px;color:black">{{info.dw_bw_av}}%</div>
+                    </div>
+                </div>
+                <a data-toggle="modal" data-target="#dwbw">
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </a>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="column col-sm-4">
+                    <p> Interfaces de la zona consumidas <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-hdd-stack" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M14 10H2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1zM2 9a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2H2z"/>
+                      <path d="M5 11.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                      <path fill-rule="evenodd" d="M14 3H2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM2 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
+                      <path d="M5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                    </svg></p>
+                </div>
+                <div class="col-md-6 align-self-center">
+                    <div class="progress" style="height:30px">
+                        <div class="progress-bar  progress-bar-animated" style="width:{{info.int_av}}%;height:30px;box-shadow:5px;color:black">{{info.int_av}}%</div>
+                    </div>
+                </div>
+                <a  data-toggle="modal" data-target="#intf">
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </a>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="column col-sm-4">
+                    <p> Direcciones ip públicas consumidas <img src="/static/ip.png" alt="ips" width="50" height="50"> </p>
+                </div>
+                <div class="col-md-6 align-self-center">
+                    <div class="progress" style="height:30px">
+                        <div class="progress-bar  progress-bar-animated" style="width:{{info.taken_internet_ips}}%;height:30px;box-shadow:5px;color:black">{{info.taken_internet_ips}}%</div>
+                    </div>
+                </div>
+                <a data-toggle="modal" data-target="#intip">
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </a>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="column col-sm-4">
+                <p> Direcciones ip públicas consumidas <img src="/static/ip2.png" alt="ips" width="50" height="50"> </p>
+                </div>
+                <div class="col-md-6 align-self-center">
+                    <div class="progress" style="height:30px">
+                        <div class="progress-bar  progress-bar-animated" style="width:{{info.taken_l2vpn_ips}}%;height:30px;box-shadow:5px;color:black">{{info.taken_l2vpn_ips}}%</div>
+                    </div>
+                </div>
+                <a  data-toggle="modal" data-target="#l2vpnip">
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </a>
+            </div>
+        </div>
+    </article>
+
+</div>
+</main>
+{% endblock content %}

@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<article class="media content-section col-md-8">
+          <div class="media-body">
+            <div>
+                <h2 class="mr-2 article-tittle text-primary">Qué es WaterP?</h2>
+              <p class="text-muted">WaterP inicia como una idea de innovación en la forma de comprar agua
+                fuera de lugares privados ya que algunos poseen bebedores. En estos tiempos ya muchas personas
+                utilizar termos personales para su hidratación diaria. Ya sea porque tienen una vida de ejercicios
+                que les demanda un consumo constante de agua o simplemente porque les gusta estar hidratados.
+                Normalmente cuando andamos en la calle y tenemos sed procedemos a comprar una botella de agua
+                plástica en algún negocio para rellenar nuestros termos y luego botamos dicha botella plástica.</p>
+            </div>
+          </div>
+        </article>
+<article class="media content-section col-md-8">
+          <div class="media-body">
+            <div>
+                <h2 class="article-title text-primary">Cuál es nuestro objetivo?</h2>
+                <p class="text-muted">Ofrecer la posibilidad de comprar agua sin necesidad de
+                    que exista una botella plástica de por medio para así ayudar a la reducción del uso de plástico.</p>
+            </div>
+          </div>
+        </article>
+
+<article class="media content-section col-md-8">
+    <div class="media-body">
+        <h2 align="center" class="article-title text-primary">Equipo</h2>
+        <div class="row">
+            <div class="col-6" align="center">
+                <div>
+                    <img src="{{url_for('static', filename='ivan.jpg')}}" class="rounded-circle" width="150" height="150">
+                </div>
+                <div>
+                    <div>
+                        <h2 class="elementor-heading-title elementor-size-default">Iván Hernández</h2>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h2 class="elementor-heading-title elementor-size-default">CEO/President</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6" align="center">
+                <div>
+                    <img src="{{url_for('static', filename='isaac.jpg')}}" class="rounded-circle" width="150" height="150">
+                </div>
+                <div>
+                    <div>
+                        <h2 class="elementor-heading-title elementor-size-default">Nelson Ramos</h2>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h2 class="elementor-heading-title elementor-size-default">CEO/President</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+<!--<article class="media content-section col-md-8">-->
+<!--          <div class="media-body">-->
+<!--              <h2 align="center"><a class="article-title text-primary">Conocenos</a></h2>-->
+<!--              <div class="container">-->
+<!--                  <colgroup>-->
+
+<!--                    <img src="{{url_for('static', filename='ivan.jpg')}}" class="rounded-circle" alt="Iván Hernández" width="150" height="150">-->
+<!--                  </colgroup>-->
+<!--              </div>-->
+<!--              <div class="container">-->
+<!--                  <div class="col-4">-->
+<!--                    <img src="{{url_for('static', filename='isaac.jpg')}}" class="rounded-circle" alt="Iván Hernández" width="150" height="150">-->
+<!--                </div>-->
+<!--              </div>-->
+<!--          </div>-->
+<!--        </article>-->
+
+
+{% endblock content %}
