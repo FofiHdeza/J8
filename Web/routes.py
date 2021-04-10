@@ -3,7 +3,7 @@ import datetime
 from flask import render_template, flash, url_for, redirect, request
 from Web import app
 from Web.Data import posts
-from Web.forms import AdddeviceForm, UpdateDeviceForm, DeviceForm, AddproductForm
+from Web.forms import AdddeviceForm, UpdateDeviceForm, DeviceForm, AddproductForm, AccountMLForm
 #from Web.Database import User, Servicio, Notificacion
 from flask_login import login_user, current_user, logout_user, login_required
 from Web import core
@@ -273,6 +273,11 @@ def Adddevice():
             core.add_device(form.ide.data,form.casn.data,form.account.data)
             flash('Device Added', 'success')
             return redirect(url_for('Devices'))
+        elif form.account.data == "Account_Sagem":
+            print(form.ide.data,form.casn.data,form.account.data)
+            core.add_device(form.ide.data,form.casn.data,form.account.data)
+            flash('Device Added', 'success')
+            return redirect(url_for('Devices'))
         else:
             flash('Account does not exist, please verify or create it', 'danger')
             return redirect(url_for('Devices'))
@@ -298,7 +303,6 @@ def Editdevice(id):
             flash('Account does not exist, please verify or create it', 'danger')
             return redirect(url_for('Devices'))
     return render_template("EditDevice.html", posts=posts, form=form,device=device)
-
 
 
 @app.route('/Addproduct/<string:id>',methods=['GET', 'POST'])
@@ -366,9 +370,9 @@ def Addproduct(id):
         products = core.filter_entitlements(device[0][1])
         flash('Entitlement Added', 'success')
         return render_template("addproduct.html", posts=posts,products=products, form=form,id=id,
-                           productscreated=productscreated,acc_devices=acc_devices)
+                           productscreated=productscreated,acc_devices=acc_devices, len_devices=len(acc_devices))
     return render_template("addproduct.html", posts=posts,products=products, form=form,id=id,
-                           productscreated=productscreated,acc_devices=acc_devices)
+                           productscreated=productscreated,acc_devices=acc_devices,len_devices=len(acc_devices))
 
 @app.route('/Deleteproduct/<string:id>',methods=['GET', 'POST'])
 def Deleteproduct(id):
@@ -380,6 +384,12 @@ def Deleteproduct(id):
 def VOD():
 
     return render_template("VOD.html", posts=posts)
+
+
+@app.route("/BTV")
+def BTV():
+
+    return render_template("BTV.html", posts=posts)
 
 # @app.route('/login', methods=['GET', 'POST'])
 # def login():
@@ -500,18 +510,32 @@ def VOD():
 #     return redirect(url_for('homepage'))
 
 
-@app.route("/Accounts")
-def Accounts():
-    # nkwargs = {'checked': False}
-    # notificaciones = Notificacion.query.filter_by(**nkwargs).all()
-    # notification = False
-    # if not notificaciones:
-    #     notification = False
-    #     print('ta vacia')
-    # else:
-    #     notification = True
-    #     print('no ta vacia')
-    return render_template("Account.html", posts=posts)
+@app.route("/AccountML",methods=['GET', 'POST'])
+def AccountML():
+    form = AccountMLForm()
+    accounts = []
+    if request.method == 'POST':
+        # if form.filter.data == '':
+        #     # devices=[['123456789', 'Account_Wiztivi', '123456789', '5f44c66e4eeb213f12a8a7f1', 'ENABLED', '2020-08-25T08:06:06.291Z', '2020-08-25T08:06:06.294Z', 'ACTIVE'], ['vm-gos-133', 'Account_01', 'vm-gos-133', '5f55f9394a6d86754ee1a4cf', 'ENABLED', '2020-09-07T09:11:21.404Z', '2020-09-07T09:11:21.407Z', 'ACTIVE'], ['0000123456', 'Account_01', '0000123456', '5f55fa8e4a6d86754ee1a4d0', 'ENABLED', '2020-09-07T09:17:02.625Z', '2020-09-14T10:13:57.026Z', 'ACTIVE'], ['0000138147', 'Account_Wiztivi', '0000138147', '5f8eaa1b45f48c4ef284f292', 'ENABLED', '2020-10-20T09:12:59.797Z', '2020-10-20T09:12:59.798Z', 'ACTIVE'], ['0000138286', 'Account_Wiztivi', '0000138286', '5f8eaa3c45f48c4ef284f294', 'ENABLED', '2020-10-20T09:13:32.295Z', '2020-10-20T09:13:32.299Z', 'ACTIVE'], ['0000138301', 'Account_Wiztivi', '0000138301', '5f8ebb7645f48c4ef284f295', 'ENABLED', '2020-10-20T10:27:02.756Z', '2020-10-20T10:27:02.760Z', 'ACTIVE'], ['0000138300', 'Account_Wiztivi', '0000138300', '5f8ebb8845f48c4ef284f296', 'ENABLED', '2020-10-20T10:27:20.988Z', '2020-10-20T10:27:20.989Z', 'ACTIVE'], ['0000138283', 'Account_Wiztivi', '0000138283', '5f8ebba245f48c4ef284f297', 'ENABLED', '2020-10-20T10:27:46.667Z', '2020-10-20T10:27:46.669Z', 'ACTIVE'], ['0000138293', 'Account_Sagem', '0000138293', '5f9022bb45f48c4ef284f298', 'ENABLED', '2020-10-21T11:59:55.678Z', '2020-10-21T11:59:55.680Z', 'ACTIVE'], ['0000138297', 'Account_Sagem', '0000138297', '5f9022c745f48c4ef284f299', 'ENABLED', '2020-10-21T12:00:07.109Z', '2020-10-21T12:00:07.112Z', 'ACTIVE'], ['0000138298', 'Account_Sagem', '0000138298', '5f9022de45f48c4ef284f29a', 'ENABLED', '2020-10-21T12:00:30.500Z', '2020-10-21T12:00:30.502Z', 'ACTIVE'], ['2153121438', 'Account_ADO', '2153121438', '5fda61ab45f48c4ef284f2b4', 'ENABLED', '2020-12-16T19:36:11.217Z', '2020-12-16T19:36:11.219Z', 'ACTIVE'], ['2153121415', 'Account_ADO', '2153121415', '5fda61b645f48c4ef284f2b5', 'ENABLED', '2020-12-16T19:36:22.678Z', '2020-12-16T19:36:22.679Z', 'ACTIVE'], ['2153121422', 'Account_ADO', '2153121422', '5fda61c145f48c4ef284f2b6', 'ENABLED', '2020-12-16T19:36:33.897Z', '2020-12-16T19:36:33.898Z', 'ACTIVE'], ['2153121428', 'Account_ADO', '2153121428', '5fda61cf45f48c4ef284f2b7', 'ENABLED', '2020-12-16T19:36:47.424Z', '2020-12-16T19:36:47.425Z', 'ACTIVE'], ['2153121435', 'Account_ADO', '2153121435', '5fda61da45f48c4ef284f2b8', 'ENABLED', '2020-12-16T19:36:58.700Z', '2020-12-16T19:36:58.701Z', 'ACTIVE'], ['2153121423', 'Account_ADO', '2153121423', '5fda61e645f48c4ef284f2b9', 'ENABLED', '2020-12-16T19:37:10.638Z', '2020-12-16T19:37:10.640Z', 'ACTIVE'], ['2153121392', 'Account_ADO', '2153121392', '5fda61f245f48c4ef284f2ba', 'ENABLED', '2020-12-16T19:37:22.239Z', '2020-12-16T19:37:22.240Z', 'ACTIVE'], ['2153121421', 'Account_ADO', '2153121421', '5fda61fe45f48c4ef284f2bb', 'ENABLED', '2020-12-16T19:37:34.376Z', '2020-12-16T19:37:34.377Z', 'ACTIVE'], ['2153121393', 'Account_ADO', '2153121393', '5fda621045f48c4ef284f2bc', 'ENABLED', '2020-12-16T19:37:52.241Z', '2020-12-18T11:13:17.389Z', 'ACTIVE'], ['2153121441', 'Account_ADO', '2153121441', '5fdb2f4645f48c4ef284f2bd', 'ENABLED', '2020-12-17T10:13:26.727Z', '2020-12-17T10:13:26.729Z', 'ACTIVE'], ['2153121446', 'Account_ADO', '2153121446', '5fdb2f5345f48c4ef284f2be', 'ENABLED', '2020-12-17T10:13:39.569Z', '2020-12-17T10:13:39.571Z', 'ACTIVE'], ['2153121457', 'Account_ADO', '2153121457', '5fdb2f5b45f48c4ef284f2bf', 'ENABLED', '2020-12-17T10:13:47.248Z', '2020-12-17T10:13:47.249Z', 'ACTIVE'], ['2153121467', 'Account_ADO', '2153121467', '5fdb2f6345f48c4ef284f2c0', 'ENABLED', '2020-12-17T10:13:55.009Z', '2020-12-17T10:13:55.011Z', 'ACTIVE'], ['2153121416', 'Account_ADO', '2153121416', '5fdb2f6b45f48c4ef284f2c1', 'ENABLED', '2020-12-17T10:14:03.126Z', '2020-12-17T10:14:03.129Z', 'ACTIVE'], ['2153121411', 'Account_ADO', '2153121411', '5fdb2f7245f48c4ef284f2c2', 'ENABLED', '2020-12-17T10:14:10.772Z', '2020-12-17T10:14:10.775Z', 'ACTIVE'], ['2153121407', 'Account_ADO', '2153121407', '5fdb2f7c45f48c4ef284f2c3', 'ENABLED', '2020-12-17T10:14:20.585Z', '2020-12-17T10:14:20.586Z', 'ACTIVE'], ['2153121447', 'Account_ADO', '2153121447', '5fdb2f8445f48c4ef284f2c4', 'ENABLED', '2020-12-17T10:14:28.537Z', '2020-12-17T10:14:28.538Z', 'ACTIVE'], ['2153121475', 'Account_ADO', '2153121475', '5fe1b32345f48c4ef284f2c5', 'ENABLED', '2020-12-22T08:49:39.269Z', '2020-12-22T08:49:39.270Z', 'ACTIVE'], ['2153121455', 'Account_ADO', '2153121455', '5fe1b36945f48c4ef284f2c6', 'ENABLED', '2020-12-22T08:50:49.996Z', '2020-12-22T08:50:49.998Z', 'ACTIVE'], ['2153121427', 'Account_ADO', '2153121427', '5fe2064045f48c4ef284f2c7', 'ENABLED', '2020-12-22T14:44:16.700Z', '2020-12-22T14:44:16.701Z', 'ACTIVE'], ['2153121417', 'Account_ADO', '2153121417', '5fe2064b45f48c4ef284f2c8', 'ENABLED', '2020-12-22T14:44:27.125Z', '2020-12-22T14:44:27.126Z', 'ACTIVE'], ['2153121436', 'Account_ADO', '2153121436', '5fe2065a45f48c4ef284f2c9', 'ENABLED', '2020-12-22T14:44:42.028Z', '2020-12-22T14:44:42.029Z', 'ACTIVE'], ['2153121429', 'Account_ADO', '2153121429', '5fe2066845f48c4ef284f2ca', 'ENABLED', '2020-12-22T14:44:56.132Z', '2020-12-22T14:44:56.136Z', 'ACTIVE'], ['2153121425', 'Account_ADO', '2153121425', '5fe2067245f48c4ef284f2cb', 'ENABLED', '2020-12-22T14:45:06.767Z', '2020-12-22T14:45:06.768Z', 'ACTIVE'], ['2313212156', 'Account_ADO_TEST', '2313212156', '5fe22ace45f48c4ef284f2cc', 'ENABLED', '2020-12-22T17:20:14.383Z', '2020-12-22T17:20:14.384Z', 'ACTIVE'], ['098765432112', 'Account_Wiztivi', '098765432112', '5fe38f6045f48c4ef284f2ce', 'ENABLED', '2020-12-23T18:41:36.819Z', '2020-12-23T18:41:36.821Z', 'ACTIVE']]
+        #     accounts = core.show_devices()
+        #     return render_template("Devices.html", posts=posts, devices=accounts, form=form)
+        # if form.filtertype.data == 'SSP':
+        #     accounts = core.show_one_device(form.filter.data)
+        #     # devices=[['123456789', 'Account_Wiztivi', '123456789', '5f44c66e4eeb213f12a8a7f1', 'ENABLED', '2020-08-25T08:06:06.291Z','2020-08-25T08:06:06.294Z', 'ACTIVE']]
+        #     return render_template("Devices.html", posts=posts, devices=accounts, form=form)
+        if form.filtertype.data == 'CASN':
+            casn = str(form.filter.data)
+            allaccounts = core.sdp_account_getbycasn(casn)
+            devices = core.sdp_devices_getbyaccount((core.sdp_account_getbycasn(casn))[9])
+            return render_template("AccountML.html", posts=posts, devices=allaccounts,acc_devices=devices,len_devices=len(devices), form=form)
+        elif form.filtertype.data == 'Acc Num':
+            acnum = str(form.filter.data)
+            allaccounts = core.sdp_account_getbyaccnumber(acnum)
+            devices = core.sdp_devices_getbyaccount((core.sdp_account_getbyaccnumber(acnum))[9])
+            return render_template("AccountML.html", posts=posts, devices=allaccounts,acc_devices=devices,len_devices=len(devices), form=form)
+    return render_template("AccountML.html", posts=posts, devices=accounts, form=form)
+
+
 
 
 # @app.route('/serviceinfo')

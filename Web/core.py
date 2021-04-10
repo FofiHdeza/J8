@@ -2,6 +2,8 @@ from time import strftime, gmtime
 
 import requests
 from pprint import pprint
+
+from bs4 import BeautifulSoup
 from tabulate import tabulate
 
 
@@ -1659,3 +1661,331 @@ def delete_entitlement(entitlementid):
 #
 #
 #
+
+##       SDP --------- MEDIALIVE
+
+def sdp_account_getbycasn(casn):
+    finalaccount = []
+    url = "http://172.16.11.247/ws-gateway/gateway/ws/deviceservice"
+    headers = {'content-type': 'text/xml'}
+    body_casn = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dev="http://quative.tv/DeviceServiceNamespace">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <dev:getDeviceByCASN>
+            <!--Optional:-->
+            <casn>"""+casn+"""</casn>
+        </dev:getDeviceByCASN>
+    </soapenv:Body>
+</soapenv:Envelope>"""
+    response_casn = requests.post(url, data=body_casn, headers=headers, auth=('administrator', 'quative'))
+    beautifulresponse_casn = BeautifulSoup(response_casn.content, 'xml')
+    account_uid = beautifulresponse_casn.find('accountUID').contents[0]
+
+    url_accounts = "http://172.16.11.247/ws-gateway/gateway/ws/accountservice"
+    body_uid = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:acc="http://quative.tv/AccountServiceNamespace">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <acc:getByUID>
+            <!--Optional:-->
+            <uid>"""+account_uid+"""</uid>
+        </acc:getByUID>
+    </soapenv:Body>
+</soapenv:Envelope>"""
+    response_uid = requests.post(url_accounts, data=body_uid, headers=headers, auth=('administrator', 'quative'))
+    beautifulresponse_uid = BeautifulSoup(response_uid.content, 'xml')
+    account_number = beautifulresponse_uid.find('accountNumber').contents[0]
+    account_status = beautifulresponse_uid.find('status').contents[0]
+    account_firstname = beautifulresponse_uid.find('firstName').contents[0]
+    account_lastname = beautifulresponse_uid.find('lastName').contents[0]
+    account_password = beautifulresponse_uid.find('password').contents[0]
+    account_npvrprof = beautifulresponse_uid.find('npvrProfile').contents[0]
+    account_credlimit = beautifulresponse_uid.find('creditLimit').contents[0]
+    account_credspent = beautifulresponse_uid.find('creditSpent').contents[0]
+    finalaccount = [account_number,account_status,account_firstname,account_lastname,account_password,
+                    account_password,account_npvrprof,account_credlimit,account_credspent,account_uid]
+    return finalaccount
+
+
+def sdp_devices_getbyaccount(account_uid):
+    finalaccount = []
+    url = "http://172.16.11.247/ws-gateway/gateway/ws/deviceservice"
+    headers = {'content-type': 'text/xml'}
+    body = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dev="http://quative.tv/DeviceServiceNamespace">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dev:getSetTopBoxByAccountUID>
+         <!--Optional:-->
+         <accountUID>"""+account_uid+"""</accountUID>
+      </dev:getSetTopBoxByAccountUID>
+   </soapenv:Body>
+</soapenv:Envelope>"""
+    response = requests.post(url, data=body, headers=headers, auth=('administrator', 'quative'))
+    beautifulresponse = BeautifulSoup(response.content, 'xml')
+    device_casn = (str(beautifulresponse.find_all('caSN')).replace('<caSN>', '').replace('</caSN>', '').replace('[', '').replace(']', '')).split(',')
+    device_status = (str(beautifulresponse.find_all('status')).replace('<status>', '').replace('</status>', '').replace('[', '').replace(']', '')).split(',')
+    device_enabled = (str(beautifulresponse.find_all('deviceEnabled')).replace('<deviceEnabled>', '').replace('</deviceEnabled>', '').replace('[', '').replace(']', '')).split(',')
+    for a,b,c in zip(device_casn,device_enabled,device_status):
+        finalaccount.append([a,b,c])
+    print(finalaccount)
+    return finalaccount
+    # for i in range(0, len(device_casn)):
+    #     print(device_casn[i], device_status[i], device_enabled[i])
+
+
+def sdp_account_getbyaccnumber(acc_number):
+    finalaccount = []
+    url = "http://172.16.11.247/ws-gateway/gateway/ws/accountservice"
+    headers = {'content-type': 'text/xml'}
+    body = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:acc="http://quative.tv/AccountServiceNamespace">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <acc:getByAccountNumber>
+            <!--Optional:-->
+            <accountNumber>"""+acc_number+"""</accountNumber>
+        </acc:getByAccountNumber>
+    </soapenv:Body>
+</soapenv:Envelope>"""
+
+    response = requests.post(url, data=body, headers=headers, auth=('administrator', 'quative'))
+    beautifulresponse = BeautifulSoup(response.content, 'xml')
+    account_number = beautifulresponse.find('accountNumber').contents[0]
+    account_status = beautifulresponse.find('status').contents[0]
+    account_firstname = beautifulresponse.find('firstName').contents[0]
+    account_lastname = beautifulresponse.find('lastName').contents[0]
+    account_password = beautifulresponse.find('password').contents[0]
+    account_npvrprof = beautifulresponse.find('npvrProfile').contents[0]
+    account_credlimit = beautifulresponse.find('creditLimit').contents[0]
+    account_credspent = beautifulresponse.find('creditSpent').contents[0]
+    account_uid = beautifulresponse.find('UID').contents[0]
+
+    finalaccount = [account_number, account_status, account_firstname, account_lastname, account_password,
+                    account_password, account_npvrprof, account_credlimit, account_credspent,account_uid]
+    return finalaccount
+
+
+def sdp_account_createnewacc(accNumber, lastName, firstName, password, status, ppvStatus, locality, npvrProfile,
+                             credLimit):
+    # En los campos opcionales, se puede enviar un '?' en vez de algo concreto.
+    # PpvStatus es true o false
+
+    url = "http://172.16.11.247/ws-gateway/gateway/ws/accountservice"
+    headers = {'content-type': 'text/xml'}
+    body = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:acc="http://quative.tv/AccountServiceNamespace">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <acc:create>
+            <!--Optional:-->
+            <model>
+                <!--Zero or more repetitions:-->
+                <changeLog>?</changeLog>
+                <!--Optional:-->
+                <creationDate>?</creationDate>
+                <!--Optional:-->
+                <exportID>?</exportID>
+                <!--Optional:-->
+                <modifiedDate>?</modifiedDate>
+                <!--Optional:-->
+                <originID>?</originID>
+                <!--Optional:-->
+                <originKey>?</originKey>
+                <!--Optional:-->
+                <serviceProviderID>?</serviceProviderID>
+                <!--Optional:-->
+                <UID>?</UID>
+                <!--Optional:-->
+                <accessPointUID>?</accessPointUID>
+                <!--Optional:-->
+                <accountNumber>""" + accNumber + """</accountNumber>
+                <!--Optional:-->
+                <accountProfileUID>?</accountProfileUID>
+                <!--Optional:-->
+                <address1>?</address1>
+                <!--Optional:-->
+                <address2>?</address2>
+                <!--Optional:-->
+                <city>?</city>
+                <!--Optional:-->
+                <country>?</country>
+                <!--Optional:-->
+                <county>?</county>
+                <!--Optional:-->
+                <creditLimit>""" + credLimit + """</creditLimit>
+                <!--Optional:-->
+                <creditSpent>?</creditSpent>
+                <!--Optional:-->
+                <creditSpentRst>?</creditSpentRst>
+                <!--Optional:-->
+                <firstName>""" + firstName + """</firstName>
+                <!--Optional:-->
+                <lastActivityTime>?</lastActivityTime>
+                <!--Optional:-->
+                <lastName>""" + lastName + """</lastName>
+                <!--Optional:-->
+                <locality>""" + locality + """</locality>
+                <!--Optional:-->
+                <maxMPDeviceAllowed>?</maxMPDeviceAllowed>
+                <!--Optional:-->
+                <maxMPDeviceDate>?</maxMPDeviceDate>
+                <!--Optional:-->
+                <maxMPDeviceDelete>?</maxMPDeviceDelete>
+                <!--Optional:-->
+                <maxUserAllowed>?</maxUserAllowed>
+                <!--Optional:-->
+                <npvrProfile>""" + npvrProfile + """</npvrProfile>
+                <!--Optional:-->
+                <password>""" + password + """</password>
+                <!--Optional:-->
+                <postCode>?</postCode>
+                <!--Optional:-->
+                <ppvStatus>""" + ppvStatus + """</ppvStatus>
+                <!--Optional:-->
+                <rolloutProfileUid>?</rolloutProfileUid>
+                <!--Optional:-->
+                <status>""" + status + """</status>
+                <!--Optional:-->
+                <statusCode>?</statusCode>
+                <!--Optional:-->
+                <title>?</title>
+            </model>
+        </acc:create>
+    </soapenv:Body>
+</soapenv:Envelope>"""
+
+    response = requests.post(url, data=body, headers=headers, auth=('administrator', 'quative'))
+    beautifulresponse = BeautifulSoup(response.content, 'xml')
+    new_account_uid = beautifulresponse.find('return').contents[0]
+    print(new_account_uid)
+
+
+def sdp_account_deleteacc(account_number, account_uid):
+    # Se puede utilizar acc UID y/o acc number, si se usa 1, poner ? en el otro.
+
+    url = "http://172.16.11.247/ws-gateway/gateway/ws/accountservice"
+    headers = {'content-type': 'text/xml'}
+    body = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:acc="http://quative.tv/AccountServiceNamespace">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <acc:purgeAccount>
+            <!--Optional:-->
+            <accountSpecification>
+                <!--Optional:-->
+                <accountNumber>""" + account_number + """</accountNumber>
+                <!--Optional:-->
+                <accountUid>""" + account_uid + """</accountUid>
+                <!--Optional:-->
+                <originSpecification>
+                    <!--Optional:-->
+                    <originId>?</originId>
+                    <!--Optional:-->
+                    <originKey>?</originKey>
+                </originSpecification>
+            </accountSpecification>
+        </acc:purgeAccount>
+    </soapenv:Body>
+</soapenv:Envelope>"""
+    response = requests.post(url, data=body, headers=headers, auth=('administrator', 'quative'))
+    beautifulresponse = BeautifulSoup(response.content, 'xml')
+    del_acc_resp = beautifulresponse.find('return').contents[0]
+    print(del_acc_resp)
+    if del_acc_resp == '1':
+        print("Account deleted")
+    else:
+        print("Update failed")
+
+
+def sdp_account_updateacc(acc_uid, lastName, firstName, password, status, ppvStatus, npvrProfile, locality,
+                          mpDeviceAllowed, profileUID, creditLimit, creditSpent):
+    # Se tienen que mandar todos los campos que requiere el def, aunque sea un ?
+    # Se puede subir el form con los datos que la cuenta ya tiene, asi no hay que agregar todo de nuevo.
+
+    url = "http://172.16.11.247/ws-gateway/gateway/ws/accountservice"
+    headers = {'content-type': 'text/xml'}
+    body = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:acc="http://quative.tv/AccountServiceNamespace">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <acc:update>
+            <!--Optional:-->
+            <model>
+                <!--Zero or more repetitions:-->
+                <changeLog>?</changeLog>
+                <!--Optional:-->
+                <creationDate>?</creationDate>
+                <!--Optional:-->
+                <exportID>?</exportID>
+                <!--Optional:-->
+                <modifiedDate>?</modifiedDate>
+                <!--Optional:-->
+                <originID>?</originID>
+                <!--Optional:-->
+                <originKey>?</originKey>
+                <!--Optional:-->
+                <serviceProviderID>?</serviceProviderID>
+                <!--Optional:-->
+                <UID>""" + acc_uid + """</UID>
+                <!--Optional:-->
+                <accessPointUID>?</accessPointUID>
+                <!--Optional:-->
+                <accountNumber>?</accountNumber>
+                <!--Optional:-->
+                <accountProfileUID>""" + profileUID + """</accountProfileUID>
+                <!--Optional:-->
+                <address1>?</address1>
+                <!--Optional:-->
+                <address2>?</address2>
+                <!--Optional:-->
+                <city>?</city>
+                <!--Optional:-->
+                <country>?</country>
+                <!--Optional:-->
+                <county>?</county>
+                <!--Optional:-->
+                <creditLimit>""" + creditLimit + """</creditLimit>
+                <!--Optional:-->
+                <creditSpent>""" + creditSpent + """</creditSpent>
+                <!--Optional:-->
+                <creditSpentRst>?</creditSpentRst>
+                <!--Optional:-->
+                <firstName>""" + firstName + """</firstName>
+                <!--Optional:-->
+                <lastActivityTime>?</lastActivityTime>
+                <!--Optional:-->
+                <lastName>""" + lastName + """</lastName>
+                <!--Optional:-->
+                <locality>""" + locality + """</locality>
+                <!--Optional:-->
+                <maxMPDeviceAllowed>""" + mpDeviceAllowed + """</maxMPDeviceAllowed>
+                <!--Optional:-->
+                <maxMPDeviceDate>?</maxMPDeviceDate>
+                <!--Optional:-->
+                <maxMPDeviceDelete>?</maxMPDeviceDelete>
+                <!--Optional:-->
+                <maxUserAllowed>?</maxUserAllowed>
+                <!--Optional:-->
+                <npvrProfile>""" + npvrProfile + """</npvrProfile>
+                <!--Optional:-->
+                <password>""" + password + """</password>
+                <!--Optional:-->
+                <postCode>?</postCode>
+                <!--Optional:-->
+                <ppvStatus>""" + ppvStatus + """</ppvStatus>
+                <!--Optional:-->
+                <rolloutProfileUid>?</rolloutProfileUid>
+                <!--Optional:-->
+                <status>""" + status + """</status>
+                <!--Optional:-->
+                <statusCode>?</statusCode>
+                <!--Optional:-->
+                <title>?</title>
+            </model>
+        </acc:update>
+    </soapenv:Body>
+</soapenv:Envelope>"""
+    response = requests.post(url, data=body, headers=headers, auth=('administrator', 'quative'))
+    beautifulresponse = BeautifulSoup(response.content, 'xml')
+    update_acc_resp = beautifulresponse.find('return').contents[0]
+    print(update_acc_resp)
+    if update_acc_resp == '1':
+        print("Account updated")
+    else:
+        print("Update failed")
+

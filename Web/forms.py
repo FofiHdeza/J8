@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, validators, SelectField, IntegerField
+from idna import unicode
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, validators, SelectField, IntegerField, RadioField,SelectMultipleField
 from wtforms.validators import DataRequired, Length, EqualTo, Email, email, ValidationError, InputRequired, number_range
 # from Web.Database import User
 #
@@ -25,10 +26,16 @@ class AdddeviceForm(FlaskForm):
 #         if user:
 #             return True
 #
+
 class DeviceForm(FlaskForm):
     filter= StringField('Filter')
     filtertype = SelectField('FilterType',
                              choices=[('CaSN', 'CaSN'), ('AccountId', 'AccountId')],validators=[DataRequired()])
+
+class AccountMLForm(FlaskForm):
+    filter= StringField('Filter')
+    filtertype = SelectField('FilterType',
+                             choices=[('CASN', 'CASN'), ('Acc Num', 'Acc Num')],validators=[DataRequired()])
 
 #
 # class InfoForm(FlaskForm):

@@ -30,9 +30,17 @@
                     </div>
                      <!-- Navbar Right Side -->
                       <div class="navbar-nav">
-                          <a class="nav-item nav-link" href="{{url_for('Accounts')}}">Accounts</a>
-                          <a class="nav-item nav-link" href="{{url_for('Devices')}}">Devices</a>
+                          <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Platform
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                  <a class="dropdown-item" onclick="location.href = '/Devices';">SSP</a>
+                                  <a class="dropdown-item" onclick="location.href = '/AccountML';">MediaLive</a>
+                              </div>
+                          </li>
                           <a class="nav-item nav-link" href="{{url_for('VOD')}}">VOD</a>
+                          <a class="nav-item nav-link" href="{{url_for('BTV')}}">BTV</a>
                    </div>
                   </div>
         </div>
