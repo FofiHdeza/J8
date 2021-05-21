@@ -1,10 +1,10 @@
 import os
 import urllib
 from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
+#from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-from flask_pymongo import PyMongo
+#from flask_pymongo import PyMongo
 #from nornir import InitNornir
 # from nornir.plugins.tasks.networking import napalm_get, netmiko_send_command, netmiko_send_config, tcp_ping
 # from nornir.core.filter import F
@@ -37,6 +37,9 @@ app.config['SERVER_NAME']='127.0.0.1:5000'
 login_manger= LoginManager(app)
 login_manger.login_view = 'login'
 login_manger.login_message_category = 'info'
+UPLOAD_FOLDER = 'uploads/'
+DOC_FOLDER = 'Doc/'
+PROC_FOLDER = 'Procedures/'
 #nr = InitNornir(config_file="Web/config.yaml")
 #app_context = app.app_context()
 #app_context.push()

@@ -2,33 +2,44 @@
 {% block content %}
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<article class="media content-section">
+<div class="content-section">
+    <br>
+    <div class="btn-group">
+                    <button type="button" class="btn btn-danger " style="margin-right: 10px" onclick="location.href = '/';" >Back</button>
+                </div>
+    <br>
     <form method="POST" action="">
         <div class="media-body">
             <br>
             <legend class="border-bottom mb-4">MediaLive</legend>
-            <button type="button" class="btn btn-success " onclick="location.href = '/Adddevice';">Add device </button>
+            <button type="button" class="btn btn-success " onclick="location.href = 'AccountML/AddMLAcc';">Create new account</button>
             <br>
-            <div class="form-group" >
-                <br>
-                        {{ form.filter.label(class="form-control-label") }}
-                        {{ form.filter(class="form-control form-control-lg") }}
+            <br>
+            <legend class="border-bottom mb-4"></legend>
+            <button type="button" class="btn btn-success " onclick="location.href = 'AccountML/AddMLdevice';">Add device </button>
+            <br>
+            <br>
+            <legend class="border-bottom mb-4"></legend>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success ">Search </button>
+            </div>
 
-                        {{ form.filtertype.label(class="form-control-label") }}
-                        {% if form.filtertype.errors %}
-                            {{ form.filtertype(class="is-invalid") }}
-                            <div class="invalid-feedback">
+            <div class="form-group" >
+                {{ form.filter.label(class="form-control-label") }}
+                {{ form.filter(class="form-control form-control-lg") }}
+
+                {{ form.filtertype.label(class="form-control-label") }}
+                {% if form.filtertype.errors %}
+                {{ form.filtertype(class="is-invalid") }}
+                <div class="invalid-feedback">
                                 {% for error in form.filtertype.errors %}
-                                    <span>{{ error }}</span>
+                                <span>{{ error }}</span>
                                 {% endfor %}
                             </div>
-                        {% else %}
-                            {{ form.filtertype(class="form-control") }}
-                        {% endif %}
+                {% else %}
+                {{ form.filtertype(class="form-control") }}
+                {% endif %}
             </div>
-             <div class="form-group">
-                <button type="submit" class="btn btn-success ">Search </button>
-             </div>
             <div class="table-responsive">
                 <br>
                 <legend class="border-bottom mb-4">Account</legend>
@@ -43,6 +54,7 @@
                             <th>npvrProfile</th>
                             <th>creditLimit</th>
                             <th>creditSpent</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,6 +67,31 @@
                                 <td>{{devices[5]}}</td>
                                 <td>{{devices[6]}}</td>
                                 <td>{{devices[7]}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-default" name="{{devices[0]}}" data-toggle="modal" data-target="#deleteservice{{ devices[0] }}">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                    <div class="modal" id="deleteservice{{ devices[0] }}">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <!-- Modal Header -->
+                                          <div class="modal-header">
+                                            <h4 class="modal-title">Confirmacion</h4>
+                                          </div>
+                                          <!-- Modal body -->
+                                          <div class="modal-body" align="center">
+                                              Esta seguro que desea continuar? {{devices[0]}}
+                                          </div>
+                                          <div class="modal-footer" align="right">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-danger " style="margin-right: 10px" data-dismiss="modal" >Cancelar</button>
+                                                    <button type="button" class="btn btn-success " style="margin-right: 10px" onclick="location.href = '/DeleteMLAcc/{{devices[0]}}';" >Aceptar</button>
+                                                </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </td>
                             </tr>
                     </tbody>
                 </table>
@@ -63,34 +100,61 @@
         </div>
     </form>
 
-</article>
+</div>
 <article class="media content-section">
             <div class="media-body">
                 <button class="btn btn-primary" onclick="myUFunction()">STBs in the account ({{len_devices}})</button>
                 <br>
                 <div id="stb" style="display:none;">
                     <table class="table table-sm table-borderless mb-0">
-                                    <thead class="thead-dark">
-                                    <tr>
-                                        <th>CaSN</th>
-                                        <th>Enable</th>
-                                        <th>ActivationStatus</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for acc_device in acc_devices %}
-                                    <tr >
-                                        <td>{{acc_device[0]}}</td>
-                                        <td>{{acc_device[1]}}</td>
-                                        <td>{%if  acc_device[2]  == 'ACTIVE' %}
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>CaSN</th>
+                                <th>Enable</th>
+                                <th>ActivationStatus</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for acc_device in acc_devices %}
+                                <tr>
+                                    <td>{{acc_device[0]}}</td>
+                                    <td>{{acc_device[1]}}</td>
+                                    <td>{%if  acc_device[2]  == "ACTIVE" or acc_device[2]  == " ACTIVE" %}
                                             <i class="fa fa-check" aria-hidden="true"> </i>
-                                            {% else %}
+                                        {% else %}
                                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                            {% endif %}</td>
-                                    </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-default" name="{{acc_device[0]}}" data-toggle="modal" data-target="#deleteMLdevice{{acc_device[0]}}">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                        <div class="modal" id="deleteMLdevice{{acc_device[0]}}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Confirmacion</h4>
+                                                    </div>
+                                                      <!-- Modal body -->
+                                                    <div class="modal-body" align="center">
+                                                        Esta seguro que desea continuar? {{acc_device[3]}}
+                                                    </div>
+                                                    <div class="modal-footer" align="right">
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-danger " style="margin-right: 10px" data-dismiss="modal" >Cancelar</button>
+                                                            <button type="button" class="btn btn-success " style="margin-right: 10px" onclick="location.href = '/DeleteMLdevice/{{acc_device[0]}}/{{acc_device[3]}}';" >Aceptar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </article>

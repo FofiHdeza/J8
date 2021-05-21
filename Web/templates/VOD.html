@@ -1,12 +1,54 @@
 {% extends "layout.html" %}
 {% block content %}
-<article class="media content-section">
-    <div class="media-body">
-        <h1 style="text-align:center">
-            HeadEndTools
-        </h1>
-        <br>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<div class="content-section">
+    <br>
+    <br>
+    <div class="btn-group">
+        <button type="button" class="btn btn-danger " style="margin-right: 10px" onclick="location.href = '/';" >Back</button>
     </div>
-</article>
+    <br>
+    <br>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div class="media-body">
+            <legend class="border-bottom mb-4">VOD</legend>
+            <div class="form-group" >
+                    {{ form.filter.label(class="form-control-label") }}
+                    {% if form.filter.errors %}
+                        {{ form.filter(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.filter.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.filter(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            <div class="form-group" >
+                    {{ form.filtertype.label(class="form-control-label") }}
+                    {% if form.filtertype.errors %}
+                        {{ form.filtertype(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.filtertype.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.filtertype(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+            <div class="results" style="width:1000px;overflow:auto">
+                <pre>{{ response }}</pre>
+            </div>
+        </div>
+    </form>
+
+</div>
 {% endblock content %}
 
